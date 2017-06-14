@@ -9,7 +9,7 @@ Step-by-step on how to deploy, configure and develop on this example app.
 
 ### Fastest Deploy
 
-Use ACCS to deploy this app.
+Use ACCS to deploy this app. See: https://cloud.oracle.com/acc
 
 ### Configuration
 
