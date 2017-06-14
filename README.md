@@ -13,7 +13,7 @@ Note: I use Ubuntu Linux distribution, adjust accordingly if using other OS (e.g
 
 The first step is to ensure that you have installed NodeJS, MongoDB and Git in your environment. In case you know that you have already installed them, feel free to move to step number 2. Otherwise if you are unsure, continue with the following assessment:
 
-Validate the installation of the required components (one at a one):
+Validate the installation of the required components (one at a time):
 ```
 nodejs --version
 mongo --version
@@ -89,7 +89,7 @@ npm install
 node app.js
 ```
 
-3. Open browser to [http://server:PORT](http://server:PORT).
+3.3 Open browser to [http://server:PORT](http://server:PORT).
 
 Update `config.js` if you want to modify the default ports or add any other configuration property.
 
