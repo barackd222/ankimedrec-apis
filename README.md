@@ -5,22 +5,20 @@ This is an application example implementing Swagger API documentation for the An
 
 ## Installation
 
-Follow the next step-by-step instructions on how to get, configure and deploy this application.
+This sections will help you deploy the different packages required to run this Application. This includes: NodeJS, MongoDB and Git.
 
+Note: I use Ubuntu Linux distibution, adjust accordingly if using other OS (e.g. "yum" if using OEL/RH).
 
-### 1.Install NodeJS and MongoDB.
+### 1. Install NodeJS, MongoDB and Git.
 
-The first step is to insatll NodeJS and MongoDB in your environment in case you haven't insatlled them. A simple way to ensure that ytou have not installed NodeJS and MongoDb in your environment is by attempting to retrieve their versions:
+The first step is to ensure that you have installed NodeJS, MongoDB and Git in your environment. In case you know that you have already installed them, feel free to move to step 2. Othwerwise if you are unsure, continue with the following assessment.
 
-For example:
+Validate the installation of the required components one by one:
 ```
 nodejs --version
 mongo --version
+git --version
 ```
-If this does not return a valid version. Then proceed with the following instruction to install the missing packages. Otherwsie feel free to move to step 2.
-
-
-Note: The following steps are for Ubuntu Linux distibutions, adjust accordsingly if using other OS (e.g. "yum" if using OEL/RH).
 
 #### 1.1 Install NodeJS
 
