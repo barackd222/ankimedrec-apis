@@ -5,7 +5,7 @@ This is an application example implementing Swagger API documentation for the An
 
 ## Installation
 
-Step-by-step on how to deploy, configure and develop on this example app.
+Step-by-step on how to deploy, configure and develop on this app.
 
 
 ### Setting Your Environment Variables
