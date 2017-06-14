@@ -8,9 +8,7 @@ This is an application example implementing Swagger API documentation for the An
 Step-by-step on how to deploy, configure and develop on this app.
 
 
-### Setting Your Environment Variables
-
-1. Download zip or Clone repository and `cd` into it.
+### Download zip or Clone repository and `cd` into it.
 
 ```
 git clone git://github.com/barackd222/ankimedrec-apis.git
