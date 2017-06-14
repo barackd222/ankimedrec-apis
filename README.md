@@ -91,7 +91,10 @@ node app.js
 
 3. Open browser to [http://server:PORT](http://server:PORT).
 
+Update `config.js` if you want to modify the default ports or add any other configuration property.
 
+
+<br>
 ### 
 #### What next? 
 
