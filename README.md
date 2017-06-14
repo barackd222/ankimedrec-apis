@@ -95,7 +95,6 @@ Update `config.js` if you want to modify the default ports or add any other conf
 
 
 <br>
-### 
 #### What next? 
 
 If you want to move your application into the Cloud, consider Oracle Application Container Cloud Service as a simple way to fast-track its enablemnet and future scalability [Click here for more information](https://cloud.oracle.com/acc).
