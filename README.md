@@ -7,11 +7,7 @@ This is an application example implementing Swagger API documentation for the An
 
 Step-by-step on how to deploy, configure and develop on this example app.
 
-### Fastest Deploy
-
-Use ACCS to deploy this app. [For more information](https://cloud.oracle.com/acc).
-
-### Configuration
+### 
 
 #### Setting Your Environment Variables
 
@@ -42,6 +38,10 @@ node app.js
 3. Open browser to [http://server:PORT](http://server:PORT).
 
 
+
+### Fastest Deploy
+
+Use Oracle Application Container Cloud Service to deploy this app. [For more information](https://cloud.oracle.com/acc).
 
 ## Meta
 
