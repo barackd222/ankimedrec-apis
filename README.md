@@ -1,4 +1,4 @@
-# Anki-Medrec - External APIs - Node.js
+# Anki-Medrec - External APIs - Node.js & MongoDB
 
 This is an application example implementing Swagger API documentation for the Anki-Medrec Platform project.  For the internal MedRegNG APIs project see , [visit this link](http://anki.medrec.oracleau.cloud).
 
