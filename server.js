@@ -3,6 +3,7 @@ var http = require('http');
 var express = require('express');
 var yaml = require('js-yaml');
 var fs = require('fs');
+var config = require('./config');
 
 // Create an Express web app
 var app = express();
@@ -11,7 +12,7 @@ var app = express();
 // New Code
 var mongo = require('mongodb');
 var monk = require('monk');
-var db = monk(process.env.MONGODB_SERVER + ':' + process.env.MONGODB_PORT + '/s2viia_contacts');
+var db = monk(config.MONGODB_SERVER + ':' + config.MONGODB_PORT + '/s2viia_contacts');
 
 // Converting YAML into JSON for Swagger UI loading purposes:
 var inputfile = 'anki-medrec.yml',

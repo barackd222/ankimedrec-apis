@@ -3,7 +3,7 @@
 module.exports = {
 
     // MongoDB Details:
-    MONGODB_SERVER: process.env.MONGODB_SERVER || localhost,
+    MONGODB_SERVER: process.env.MONGODB_SERVER,
     MONGODB_PORT: process.env.MONGODB_PORT || 27017,
 
     // The port your web application will run on
