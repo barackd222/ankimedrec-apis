@@ -8,7 +8,7 @@ This is an application example implementing Swagger API documentation for the An
 Step-by-step on how to deploy, configure and develop on this example app.
 
 
-## Setting Your Environment Variables
+### Setting Your Environment Variables
 
 1. Download zip or Clone repository and `cd` into it.
 
@@ -16,7 +16,7 @@ Step-by-step on how to deploy, configure and develop on this example app.
 git clone git://github.com/barackd222/ankimedrec-apis.git
 ```
 
-## Running the Application
+### Running the Application
 
 Getting your local environment setup to work with this app is easy.  
 After you configure your app with the steps above use this guide to
@@ -37,8 +37,8 @@ node app.js
 3. Open browser to [http://server:PORT](http://server:PORT).
 
 
-
-### Fastest Deploy
+### 
+#### Fastest Deploy
 
 Use Oracle Application Container Cloud Service to deploy this app. [For more information](https://cloud.oracle.com/acc).
 
