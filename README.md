@@ -1,26 +1,26 @@
 # Anki-Medrec - External APIs - Node.js & MongoDB
 
-This is an application example implementing Swagger API documentation for the Anki-Medrec Platform project.  For the internal MedRegNG APIs project see , [visit this link](http://anki.medrec.oracleau.cloud).
+This is an application provides a Swagger API documentation for the Anki-Medrec Platform project.  For more information, [visit this link](http://anki.medrec.oracleau.cloud).
 
 
 ## Installation
 
 This sections will help you deploy the different packages required to run this Application. This includes: NodeJS, MongoDB and Git.
 
-Note: I use Ubuntu Linux distibution, adjust accordingly if using other OS (e.g. "yum" if using OEL/RH).
+Note: I use Ubuntu Linux distribution, adjust accordingly if using other OS (e.g. "yum" if using Fedora based distributions).
 
 ### 1. Install NodeJS, MongoDB and Git.
 
-The first step is to ensure that you have installed NodeJS, MongoDB and Git in your environment. In case you know that you have already installed them, feel free to move to step 2. Othwerwise if you are unsure, continue with the following assessment.
+The first step is to ensure that you have installed NodeJS, MongoDB and Git in your environment. In case you know that you have already installed them, feel free to move to step number 2. Otherwise if you are unsure, continue with the following assessment:
 
-Validate the installation of the required components one by one:
+Validate the installation of the required components (one at a one):
 ```
 nodejs --version
 mongo --version
 git --version
 ```
 
-#### 1.1 Install NodeJS
+#### 1.1 Install NodeJS (if not already installed)
 
 ```
 sudo apt-get install curl -y
@@ -30,16 +30,16 @@ sudo apt-get install nodejs -y
 ```
 Validate the NodeJS installation:
 ```
-mongo --version
+node --version
 ```
 You should get a valid version. I used NodeJS version 4.8.0 while building this application.
 
-For more information about using NodeJS [visit to this blog](https://nodejs.org/en/download/package-manager/). 
+For more information about using NodeJS [visit to this page](https://nodejs.org/en/download/package-manager/). 
 
-#### 1.2 Install MongoDB:
+#### 1.2 Install MongoDB (if not already installed):
 
 ```
-sudo apt-get install mongodb
+sudo apt-get install mongodb -y
 ```
 
 Validate the MongoDB installation:
@@ -48,28 +48,42 @@ mongo --version
 ```
 You should get a valid version. I used MongDB shell version 2.6.10 while building this application
 
-For more information about using MongoDB [visit to this blog](https://redthunder.blog/2017/02/28/teaching-how-to-use-mongodb-and-expose-it-via-nodejs-apis/). 
+For more information about using MongoDB [visit to this page](https://redthunder.blog/2017/02/28/teaching-how-to-use-mongodb-and-expose-it-via-nodejs-apis/). 
 
 
-### Download zip or Clone repository and `cd` into it.
+#### 1.3 Install Git (if not already installed):
+
+```
+sudo apt-get install git -y
+```
+
+Validate the Git installation:
+```
+git --version
+```
+You should get a valid version. I used Git version 2.7.4 while building this application
+
+For more information about using installing Git [visit to this page](https://www.digitalocean.com/community/tutorials/how-to-install-git-on-ubuntu-16-04). 
+
+
+### 2. Cloning the Git repository
 
 ```
 git clone git://github.com/barackd222/ankimedrec-apis.git
+cd ankimedrec-apis
 ```
 
-### Running the Application
+### 3. Running the Application
 
-Getting your local environment setup to work with this app is easy.  
-After you configure your app with the steps above use this guide to
-get it going locally.
+Getting your local environment setup to work with this app locally is easy.  
 
-1. Install the dependencies.
+3.1 Install project package dependencies.
 
 ```
 npm install
 ```
 
-2. Launch local development webserver.
+3.2. Launch Application.
 
 ```
 node app.js
@@ -79,13 +93,12 @@ node app.js
 
 
 ### 
-#### Fastest Deploy
+#### What next? 
 
-Use Oracle Application Container Cloud Service to deploy this app. [For more information](https://cloud.oracle.com/acc).
+If you want to move your application into the Cloud, consider Oracle Application Container Cloud Service as a simple way to fast-track its enablemnet and future scalability [Click here for more information](https://cloud.oracle.com/acc).
 
-### 
-
-## Meta
+<br>
+<br>
 
 * No warranty expressed or implied.  Software is as is.
 * [MIT License](http://www.opensource.org/licenses/mit-license.html)
