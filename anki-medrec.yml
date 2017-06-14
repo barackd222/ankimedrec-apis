@@ -1,0 +1,1295 @@
+swagger: "2.0"
+info:
+  description: "This project aims to provide a base of eHealth APIs that can be leveraged for building new ideas. The APIs shown here are fully functional and can be tested in-place. When invoked, they call the Anki-MedRec Platform backend Applciations."
+  version: "1.0"
+  title: "Anki-MedRec Platform - External APIs"
+  #termsOfService: "http://anki-medrec.oracleau.cloud/terms/"
+  contact:
+    email: "carlos.rodriguez.iturria@oracle.com"
+  #license:
+  #  name: "Apache 2.0"
+  #  url: "http://www.apache.org/licenses/LICENSE-2.0.html"
+#host: "dev-apis.oracleau.cloud"
+#basePath: "/v1"
+host: "dev-apis.oracleau.cloud:3006"
+tags:
+- name: "Physician"
+  description: "Physician is the person qualified to practise medicine, especially one who specialises in diagnosis and medical treatment."
+  externalDocs:
+    description: "Find out more"
+    url: "http://anki-medrec.oracleau.cloud"
+- name: "Patient"
+  description: "Patient is a person receiving or registered to receive medical treatment."
+  externalDocs:
+    description: "Find out more"
+    url: "http://anki-medrec.oracleau.cloud"
+schemes:
+- "http"
+paths:
+  /physicians:
+    get:
+      tags:
+      - "Physician"
+      summary: "Finds All Physicians"
+      description: "Returns all Physicians"
+      operationId: "getPhysicians"
+      produces:
+      - "application/json"
+      responses:
+        200:
+          description: "Returns the full list of Physicians that exist in the system."
+          schema:
+            properties:
+              Physicians:
+                type: "array"
+                items:
+                  allOf:
+                    - properties:
+                        _id:
+                          type: "string"
+                          minLength: 24
+                          maxLength: 24
+                          example: "ID-GOES-HERE"
+                    - $ref: "#/definitions/Physician"
+                  
+        404:
+          description: "Physicians not found"
+    post:
+      tags:
+      - "Physician"
+      summary: "Adds new Physicians"
+      description: "Returns a Responseful execution message"
+      operationId: "addPhysicians"
+      consumes:
+      - "application/json"
+      produces:
+      - "application/json"
+      parameters:
+      - in: "body"
+        name: "body"
+        description: "Array of Physician objects that needs to be added. (Note: Ids can be excluded."
+        required: true
+        schema:
+          properties:
+            Physicians:
+              type: "array"
+              items:
+                $ref: "#/definitions/Physician"
+      responses:
+        200:
+          description: "Returns a message that refers to a Responseful execution."
+          schema:
+            $ref: "#/definitions/Response"      
+        405:
+          description: "Invalid input"
+  /physician:
+    post:
+      tags:
+      - "Physician"
+      summary: "Adds a new Physician"
+      description: "Returns a Responseful execution message"
+      operationId: "addPhysician"
+      consumes:
+      - "application/json"
+      produces:
+      - "application/json"
+      parameters:
+      - in: "body"
+        name: "body"
+        description: "Physician to be added. Incoming Body requires full Physician attributes, excluding Physician Id."
+        required: true
+        schema:
+          $ref: "#/definitions/Physician"
+      responses:
+        200:
+          description: "Returns a message that refers to a Responseful execution."
+          schema:
+            $ref: "#/definitions/Response"   
+        405:
+          description: "Invalid input"
+  /physician/{PhysicianId}:
+    get:
+      tags:
+      - "Physician"
+      summary: "Finds a Physician by Id"
+      description: "Returns a single Physician"
+      operationId: "getPhysicianById"
+      produces:
+      - "application/json"
+      parameters:
+      - name: "PhysicianId"
+        in: "path"
+        description: "ID of Physician to return"
+        required: true
+        type: "string"
+      responses:
+        200:
+          description: "Requested Physician matching by Id"
+          schema:
+            allOf:
+              - properties:
+                  _id:
+                    type: "string"
+                    minLength: 24
+                    maxLength: 24
+                    example: "ID-GOES-HERE"
+              - $ref: "#/definitions/Physician"
+        400:
+          description: "Invalid ID supplied"
+        404:
+          description: "Physician not found"
+    put:
+      tags:
+      - "Physician"
+      summary: "Updates an existing Physician"
+      description: "Returns a Responseful execution message"
+      operationId: "updatePhysician"
+      consumes:
+      - "application/json"
+      produces:
+      - "application/json"
+      parameters:
+      - name: "PhysicianId"
+        in: "path"
+        description: "ID of Physician to modify"
+        required: true
+        type: "string"      
+      - in: "body"
+        name: "body"
+        description: "Physician to be upadated. Incoming Body requires full Physician attributes, excluding Physician Id."
+        required: true
+        schema:
+          $ref: "#/definitions/Physician"
+      responses:
+        200:
+          description: "Returns a message that refers to a Responseful execution."
+          schema:
+            $ref: "#/definitions/Response"            
+        400:
+          description: "Invalid Physician Id supplied"
+        404:
+          description: "Physician not found"
+        405:
+          description: "Invalid Input"          
+    delete:
+      tags:
+      - "Physician"
+      summary: "Deletes a Physician by Id"
+      description: "Returns a Responseful execution message"
+      operationId: "deletePhysician"
+      produces:
+      - "application/json"
+      parameters:
+      - name: "PhysicianId"
+        in: "path"
+        description: "Physician Id to be deleted"
+        required: true
+        type: "string"
+      responses:
+        200:
+          description: "Returns a message that refers to a Responseful execution."
+          schema:
+            $ref: "#/definitions/Response"   
+        400:
+          description: "Invalid ID supplied"
+        404:
+          description: "Physician not found"
+  /physician/{PhysicianId}/prescriptions:
+    get:
+      tags:
+      - "Physician"
+      summary: "Finds All Prescriptions issued by Physician"
+      description: "Returns all Prescriptions"
+      operationId: "getPrescriptionsByPhysician"
+      produces:
+      - "application/json"
+      parameters:
+      - name: "PhysicianId"
+        in: "path"
+        description: "ID of Physician to return Prescriptions"
+        required: true
+        type: "string"      
+      responses:
+        200:
+          description: "Returns the full list of Prescriptions that exist in the system."
+          schema:
+            properties:
+              Prescriptions:
+                type: "array"
+                items:
+                  allOf:
+                    - properties:
+                        _id:
+                          type: "string"
+                          minLength: 24
+                          maxLength: 24
+                          example: "ID-GOES-HERE"
+                    - $ref: "#/definitions/Prescription"
+        404:
+          description: "Prescriptions not found"
+  /physician/{PhysicianId}/calendar:
+    get:
+      tags:
+      - "Physician"
+      summary: "Returns Physician Calendar"
+      description: "Returns all Prescriptions"
+      operationId: "getPhysicianCalendar"
+      produces:
+      - "application/json"
+      parameters:
+      - name: "PhysicianId"
+        in: "path"
+        description: "ID of Physician to return Calendar"
+        required: true
+        type: "string"      
+      responses:
+        200:
+          description: "Returns Physician Calendar"
+          schema:
+            properties:
+              Calendar:
+                type: "array"
+                items:
+                  allOf:
+                    - properties:
+                        _id:
+                          type: "string"
+                          minLength: 24
+                          maxLength: 24
+                          example: "ID-GOES-HERE"
+                    - $ref: "#/definitions/Calendar"
+        404:
+          description: "Prescriptions not found"          
+    post:
+      tags:
+      - "Physician"
+      summary: "Adds a new entry to Physician Calendar"
+      description: "Returns a Responseful execution message"
+      operationId: "addToPhysicianCalendar"
+      consumes:
+      - "application/json"
+      produces:
+      - "application/json"
+      parameters:
+      - name: "PhysicianId"
+        in: "path"
+        description: "ID of Physician to return Calendar"
+        required: true
+        type: "string"       
+      - in: "body"
+        name: "body"
+        description: "Entry to be added to Physician Calendar. Note: Physician Ids can be excluded from Payload, as all new entries will default to the PhysicianId given by URL."
+        required: true
+        schema:
+          properties:
+            Calendar:
+              type: "array"
+              items:
+                $ref: "#/definitions/Calendar"
+      responses:
+        200:
+          description: "Returns a message that refers to a Responseful execution."
+          schema:
+            $ref: "#/definitions/Response"   
+        405:
+          description: "Invalid input"          
+  /physician/{PhysicianId}/calendar/{entryId}:
+    put:
+      tags:
+      - "Physician"
+      summary: "Updates an existing Physician Calendar Entry"
+      description: "Returns a Responseful execution message"
+      operationId: "updatePhysicianCalendar"
+      consumes:
+      - "application/json"
+      produces:
+      - "application/json"
+      parameters:
+      - name: "PhysicianId"
+        in: "path"
+        description: "ID of Physician to update Calendar entry"
+        required: true
+        type: "string"
+      - name: "entryId"
+        in: "path"
+        description: "Calendar entry Id to be updated"
+        required: true
+        type: "string"        
+      - in: "body"
+        name: "body"
+        description: "Physician Calendar entry to be upadated. Note: PhysicianIds and Calendar EntryIds can be excluded from Payload, as all new entries will default to those values provided by URL."
+        required: true
+        schema:
+          properties:
+            Entry:
+              $ref: "#/definitions/Calendar"
+      responses:
+        200:
+          description: "Returns a message that refers to a Responseful execution."
+          schema:
+            $ref: "#/definitions/Response"            
+        400:
+          description: "Invalid Physician Id supplied"
+        404:
+          description: "Physician not found"
+        405:
+          description: "Invalid Input"          
+  /patients:
+    get:
+      tags:
+      - "Patient"
+      summary: "Finds All Patients"
+      description: "Returns all Patients"
+      operationId: "getPatients"
+      produces:
+      - "application/json"
+      responses:
+        200:
+          description: "Returns the full list of Patients that exist in the system."
+          schema:
+            properties:
+              Patients:
+                type: "array"
+                items:
+                  allOf:
+                    - properties:
+                        _id:
+                          type: "string"
+                          minLength: 24
+                          maxLength: 24
+                          example: "ID-GOES-HERE"
+                        CarerId:
+                          type: "string"
+                          minLength: 24
+                          maxLength: 24
+                          example: "ID-GOES-HERE"                           
+                    - $ref: "#/definitions/Patient"                                               
+        404:
+          description: "Patients not found"
+    post:
+      tags:
+      - "Patient"
+      summary: "Adds new Patients"
+      description: "Returns a Responseful execution message"
+      operationId: "addPatients"
+      consumes:
+      - "application/json"
+      produces:
+      - "application/json"
+      parameters:
+      - in: "body"
+        name: "body"
+        description: "Array of Patient objects that needs to be added."
+        required: true
+        schema:
+          properties:
+            Patients:
+              type: "array"
+              items:
+                $ref: "#/definitions/Patient"
+      responses:
+        200:
+          description: "Returns a message that refers to a Responseful execution."
+          schema:
+            $ref: "#/definitions/Response"      
+        405:
+          description: "Invalid input"
+  /patient:
+    get:
+      tags:
+      - "Patient"
+      summary: "Finds Patients by Query Parameter"
+      description: "Returns a single Patient"
+      operationId: "getPatientByQuery"
+      produces:
+      - "application/json"
+      parameters:
+      - name: "m"
+        in: "query"
+        description: "Method used to search for Patient(s). Options include email and mobile."
+        required: true
+        type: "string"
+      - name: "val"
+        in: "query"
+        description: "Value used to search for Patient(s). Options include actual email or mobile. Depending on the method being used."
+        required: true
+        type: "string"        
+      responses:
+        200:
+          description: "Requested Patient(s) matching by Query Parameters"
+          schema:
+            allOf:
+              - properties:
+                  Patients:
+                    type: "array"
+                    items:
+                      allOf:
+                        - properties:
+                            _id:
+                              type: "string"
+                              minLength: 24
+                              maxLength: 24
+                              example: "ID-GOES-HERE"
+                            CarerId:
+                              type: "string"
+                              minLength: 24
+                              maxLength: 24
+                              example: "ID-GOES-HERE"
+                        - $ref: '#/definitions/Patient'
+        400:
+          description: "Invalid ID supplied"
+        404:
+          description: "Patient not found"          
+  /patient/{PatientId}:
+    get:
+      tags:
+      - "Patient"
+      summary: "Finds a Patient by Id"
+      description: "Returns a single Patient"
+      operationId: "getPatientById"
+      produces:
+      - "application/json"
+      parameters:
+      - name: "PatientId"
+        in: "path"
+        description: "ID of Patient to return"
+        required: true
+        type: "string"
+      responses:
+        200:
+          description: "Requested Patient matching by Id"
+          schema:
+            allOf:
+              - properties:
+                  _id:
+                    type: "string"
+                    minLength: 24
+                    maxLength: 24
+                    example: "ID-GOES-HERE"
+                  CarerId:
+                    type: "string"
+                    minLength: 24
+                    maxLength: 24
+                    example: "ID-GOES-HERE"
+              - $ref: "#/definitions/Patient"
+        400:
+          description: "Invalid ID supplied"
+        404:
+          description: "Patient not found"
+    put:
+      tags:
+      - "Patient"
+      summary: "Updates an existing Patient"
+      description: "Returns a Responseful execution message"
+      operationId: "updatePatient"
+      consumes:
+      - "application/json"
+      produces:
+      - "application/json"
+      parameters:
+      - name: "PatientId"
+        in: "path"
+        description: "ID of Patient to be updated"
+        required: true
+        type: "string"         
+      - in: "body"
+        name: "body"
+        description: "Patient to be upadated. Incoming Body requires full Patient attributes."
+        required: true
+        schema:
+          $ref: "#/definitions/Patient"
+      responses:
+        200:
+          description: "Returns a message that refers to a Responseful execution."
+          schema:
+            $ref: "#/definitions/Response"            
+        400:
+          description: "Invalid Patient Id supplied"
+        404:
+          description: "Patient not found"
+        405:
+          description: "Invalid Input"          
+    delete:
+      tags:
+      - "Patient"
+      summary: "Deletes a Patient by Id"
+      description: "Returns a Responseful execution message"
+      operationId: "deletePatient"
+      produces:
+      - "application/json"
+      parameters:
+      - name: "PatientId"
+        in: "path"
+        description: "Patient Id to be deleted"
+        required: true
+        type: "string"
+      responses:
+        200:
+          description: "Returns a message that refers to a Responseful execution."
+          schema:
+            $ref: "#/definitions/Response"   
+        400:
+          description: "Invalid ID supplied"
+        404:
+          description: "Patient not found"
+  /patient/{PatientId}/consultations: 
+    get:
+      tags:
+      - "Patient"
+      summary: "Returns Patient current Medical consultations"
+      description: "Returns all Medical consultations"
+      operationId: "getPatientconsultations"
+      produces:
+      - "application/json"
+      parameters:
+      - name: "PatientId"
+        in: "path"
+        description: "ID of Patient to return Medical consultations"
+        required: true
+        type: "string"      
+      responses:
+        200:
+          description: "Returns Patient Medical consultations"
+          schema:
+            properties:
+              MedicalConsultations:
+                type: "array"
+                items:
+                  allOf:
+                    - properties:
+                        _id:
+                          type: "string"
+                          minLength: 24
+                          maxLength: 24
+                          example: "ID-GOES-HERE"
+                        CarerId:
+                          type: "string"
+                          minLength: 24
+                          maxLength: 24
+                          example: "ID-GOES-HERE"
+                    - $ref: "#/definitions/MedicalConsultation"
+        404:
+          description: "Prescriptions not found"          
+    post:
+      tags:
+      - "Patient"
+      summary: "Adds a new Patient Medical Consultation"
+      description: "Returns a Responseful execution message"
+      operationId: "addPatientConsultation"
+      consumes:
+      - "application/json"
+      produces:
+      - "application/json"
+      parameters:
+      - name: "PatientId"
+        in: "path"
+        description: "ID of Patient to add Medical consultations"
+        required: true
+        type: "string"   
+      - in: "body"
+        name: "body"
+        description: "Medical Consultation to be added to Patient Record. Note: PatientId can be excluded from Payload, as all new entries will default to the value provided by URL."
+        required: true
+        schema:
+          properties:
+            MedicalConsultations:
+              type: "array"
+              items:
+                $ref: "#/definitions/MedicalConsultation"
+      responses:
+        200:
+          description: "Returns a message that refers to a Responseful execution."
+          schema:
+            $ref: "#/definitions/Response"   
+        405:
+          description: "Invalid input"          
+  /patient/{PatientId}/consultations/{entryId}: 
+    put:
+      tags:
+      - "Patient"
+      summary: "Updates an existing Patient Medical Consultations(s)"
+      description: "Returns a Responseful execution message"
+      operationId: "updatePatientConsultations"
+      consumes:
+      - "application/json"
+      produces:
+      - "application/json"
+      parameters:
+      - name: "PatientId"
+        in: "path"
+        description: "Patient Id to update Medical consultations"
+        required: true
+        type: "string"  
+      - name: "entryId"
+        in: "path"
+        description: "Medical Consultations entry Id to be updated in Patient Medical records"
+        required: true
+        type: "string"          
+      - in: "body"
+        name: "body"
+        description: "Patient Medical Consultations(s) to be upadated. Note: PatientId and Medical Consultation entryId can be excluded from Payload, as all new entries will default to those values provided by URL."
+        required: true
+        schema:
+          properties:
+            MedicalConsultation:
+              $ref: "#/definitions/MedicalConsultation"
+      responses:
+        200:
+          description: "Returns a message that refers to a Responseful execution."
+          schema:
+            $ref: "#/definitions/Response"            
+        400:
+          description: "Invalid Patient Id supplied"
+        404:
+          description: "Patient not found"
+        405:
+          description: "Invalid Input"                      
+  /patient/{PatientId}/appointments: 
+    get:
+      tags:
+      - "Patient"
+      summary: "Returns Patient current Medical Appointments"
+      description: "Returns all Patient Medical Appointments"
+      operationId: "getPatientAppointments"
+      produces:
+      - "application/json"
+      parameters:
+      - name: "PatientId"
+        in: "path"
+        description: "ID of Patient to return Medical Appointments"
+        required: true
+        type: "string"      
+      responses:
+        200:
+          description: "Returns Patient Medical Appointments"
+          schema:
+            properties:
+              Appointments:
+                type: "array"
+                items:
+                  allOf:
+                    - properties:
+                        _id:
+                          type: "string"
+                          minLength: 24
+                          maxLength: 24
+                          example: "ID-GOES-HERE"
+                        CarerId:
+                          type: "string"
+                          minLength: 24
+                          maxLength: 24
+                          example: "ID-GOES-HERE"
+                    - $ref: "#/definitions/MedicalAppointment"
+        404:
+          description: "Prescriptions not found"          
+    post:
+      tags:
+      - "Patient"
+      summary: "Adds new Patient Medical Appointment(s)"
+      description: "Returns a Responseful execution message"
+      operationId: "addPatientAppointment"
+      consumes:
+      - "application/json"
+      produces:
+      - "application/json"
+      parameters:
+      - name: "PatientId"
+        in: "path"
+        description: "ID of Patient to add Medical Appointments"
+        required: true
+        type: "string"   
+      - in: "body"
+        name: "body"
+        description: "Medical Appointment(s) to be added to Patient Record. Note: PatientId can be excluded from Payload, as all new entries will default to the value provided by URL."
+        required: true
+        schema:
+          properties:
+            Appointments:
+              type: "array"
+              items:
+                $ref: "#/definitions/MedicalAppointment"
+      responses:
+        200:
+          description: "Returns a message that refers to a Responseful execution."
+          schema:
+            $ref: "#/definitions/Response"   
+        405:
+          description: "Invalid input"          
+  /patient/{PatientId}/appointments/{entryId}:
+    put:
+      tags:
+      - "Patient"
+      summary: "Updates an existing Patient Medical Appointment(s)"
+      description: "Returns a Responseful execution message"
+      operationId: "updatePatientAppointment"
+      consumes:
+      - "application/json"
+      produces:
+      - "application/json"
+      parameters:
+      - name: "PatientId"
+        in: "path"
+        description: "ID of Patient to update Medical Appointments"
+        required: true
+        type: "string"   
+      - name: "entryId"
+        in: "path"
+        description: "Medical Consultations entry Id to be updated in Patient Medical records"
+        required: true
+        type: "string"
+      - in: "body"
+        name: "body"
+        description: "Patient Medical Appointment(s) to be upadated. Note: PatientId and Medical Appointment entryId can be excluded from Payload, as all new entries will default to those values provided by URL."
+        required: true
+        schema:
+          properties:
+            Appointment:
+             $ref: "#/definitions/MedicalAppointment"
+      responses:
+        200:
+          description: "Returns a message that refers to a Responseful execution."
+          schema:
+            $ref: "#/definitions/Response"            
+        400:
+          description: "Invalid Patient Id supplied"
+        404:
+          description: "Patient not found"
+        405:
+          description: "Invalid Input"                      
+  /patient/{PatientId}/prescriptions: 
+    get:
+      tags:
+      - "Patient"
+      summary: "Returns Patient current Medical Prescriptions"
+      description: "Returns all Patient Medical Prescriptions"
+      operationId: "getPatientPrescriptions"
+      produces:
+      - "application/json"
+      parameters:
+      - name: "PatientId"
+        in: "path"
+        description: "ID of Patient to return Medical Prescriptions"
+        required: true
+        type: "string"      
+      responses:
+        200:
+          description: "Returns Patient Medical Prescriptions"
+          schema:
+            properties:
+              Prescriptions:
+                type: "array"
+                items:
+                  allOf:
+                    - properties:
+                        _id:
+                          type: "string"
+                          minLength: 24
+                          maxLength: 24
+                          example: "ID-GOES-HERE"
+                        CarerId:
+                          type: "string"
+                          minLength: 24
+                          maxLength: 24
+                          example: "ID-GOES-HERE"
+                    - $ref: "#/definitions/Prescription"
+        404:
+          description: "Prescriptions not found"          
+    post:
+      tags:
+      - "Patient"
+      summary: "Adds new Patient Medical Prescription(s)"
+      description: "Returns a Responseful execution message"
+      operationId: "addPatientPrescription"
+      consumes:
+      - "application/json"
+      produces:
+      - "application/json"
+      parameters:
+      - name: "PatientId"
+        in: "path"
+        description: "ID of Patient to add Medical Prescriptions"
+        required: true
+        type: "string"   
+      - in: "body"
+        name: "body"
+        description: "Medical Prescription(s) to be added to Patient Record. Note: PatientId can be excluded from Payload, as all new entries will default to the value provided by URL."
+        required: true
+        schema:
+          properties:
+            Prescriptions:
+              type: "array"
+              items:
+                $ref: "#/definitions/Prescription"
+      responses:
+        200:
+          description: "Returns a message that refers to a Responseful execution."
+          schema:
+            $ref: "#/definitions/Response"   
+        405:
+          description: "Invalid input"          
+  /patient/{PatientId}/prescriptions/{entryId}:
+    put:
+      tags:
+      - "Patient"
+      summary: "Updates an existing Patient Medical Prescription(s)"
+      description: "Returns a Responseful execution message"
+      operationId: "updatePatientPrescription"
+      consumes:
+      - "application/json"
+      produces:
+      - "application/json"
+      parameters:
+      - name: "PatientId"
+        in: "path"
+        description: "ID of Patient to update Medical Prescriptions"
+        required: true
+        type: "string"   
+      - name: "entryId"
+        in: "path"
+        description: "Medical Consultation entry Id to be updated in Patient Medical records"
+        required: true
+        type: "string"        
+      - in: "body"
+        name: "body"
+        description: "Patient Medical Prescription(s) to be upadated. Note: PatientId and Medical Prescription entryId can be excluded from Payload, as all new entries will default to those values provided by URL."
+        required: true
+        schema:
+          properties:
+            Prescription:
+              $ref: "#/definitions/Prescription"
+      responses:
+        200:
+          description: "Returns a message that refers to a Responseful execution."
+          schema:
+            $ref: "#/definitions/Response"            
+        400:
+          description: "Invalid Patient Id supplied"
+        404:
+          description: "Patient not found"
+        405:
+          description: "Invalid Input"                                
+  /patient/{PatientId}/observations: 
+    get:
+      tags:
+      - "Patient"
+      summary: "Returns Patient current Medical observations"
+      description: "Returns all Patient Medical observations"
+      operationId: "getPatientObservations"
+      produces:
+      - "application/json"
+      parameters:
+      - name: "PatientId"
+        in: "path"
+        description: "ID of Patient to return Medical observations"
+        required: true
+        type: "string"      
+      responses:
+        200:
+          description: "Returns Patient Medical observations"
+          schema:
+            properties:
+              MedicalObservations:
+                type: "array"
+                items:
+                  allOf:
+                    - properties:
+                        _id:
+                          type: "string"
+                          minLength: 24
+                          maxLength: 24
+                          example: "ID-GOES-HERE"
+                        CarerId:
+                          type: "string"
+                          minLength: 24
+                          maxLength: 24
+                          example: "ID-GOES-HERE"
+                    - $ref: "#/definitions/MedicalObservation"
+        404:
+          description: "Prescriptions not found"          
+    post:
+      tags:
+      - "Patient"
+      summary: "Adds new Patient Medical Observation(s)"
+      description: "Returns a Responseful execution message"
+      operationId: "addPatientObservations"
+      consumes:
+      - "application/json"
+      produces:
+      - "application/json"
+      parameters:
+      - name: "PatientId"
+        in: "path"
+        description: "ID of Patient to add Medical observations"
+        required: true
+        type: "string"   
+      - in: "body"
+        name: "body"
+        description: "Medical Observation(s) to be added to Patient Record.  Note: PatientId can be excluded from Payload, as all new entries will default to the value provided by URL."
+        required: true
+        schema:
+          properties:
+            MedicalObservations:
+              type: "array"
+              items:
+                $ref: "#/definitions/MedicalObservation"
+      responses:
+        200:
+          description: "Returns a message that refers to a Responseful execution."
+          schema:
+            $ref: "#/definitions/Response"   
+        405:
+          description: "Invalid input"          
+  /patient/{PatientId}/observations/{entryId}:
+    put:
+      tags:
+      - "Patient"
+      summary: "Updates an existing Patient Medical Observation(s)"
+      description: "Returns a Responseful execution message"
+      operationId: "updatePatientObservations"
+      consumes:
+      - "application/json"
+      produces:
+      - "application/json"
+      parameters:
+      - name: "PatientId"
+        in: "path"
+        description: "ID of Patient to update Medical observations"
+        required: true
+        type: "string"   
+      - name: "entryId"
+        in: "path"
+        description: "Medical Consultation entry Id to be updated in Patient Medical records"
+        required: true
+        type: "string"        
+      - in: "body"
+        name: "body"
+        description: "Patient Medical Observation(s) to be upadated. Note: PatientId and Medical Observation entryId can be excluded from Payload, as all new entries will default to those values provided by URL."
+        required: true
+        schema:
+          properties:
+            MedicalObservation:
+              $ref: "#/definitions/MedicalObservation"
+      responses:
+        200:
+          description: "Returns a message that refers to a Responseful execution."
+          schema:
+            $ref: "#/definitions/Response"            
+        400:
+          description: "Invalid Patient Id supplied"
+        404:
+          description: "Patient not found"
+        405:
+          description: "Invalid Input"                                          
+  /patient/{PatientId}/carer: 
+    get:
+      tags:
+      - "Patient"
+      summary: "Returns Patient carer"
+      description: "Returns Patient carer"
+      operationId: "getPatientcarer"
+      produces:
+      - "application/json"
+      parameters:
+      - name: "PatientId"
+        in: "path"
+        description: "ID of Patient to return carer"
+        required: true
+        type: "string"      
+      responses:
+        200:
+          description: "Returns Patient carer"
+          schema:
+            properties:
+              Carer:
+                allOf:
+                  - properties:
+                      _id:
+                        type: "string"
+                        minLength: 24
+                        maxLength: 24
+                        example: "ID-GOES-HERE"
+                  - $ref: '#/definitions/Carer'
+
+        404:
+          description: "Prescriptions not found"          
+    post:
+      tags:
+      - "Patient"
+      summary: "Adds new Patient carer"
+      description: "Returns a Responseful execution message"
+      operationId: "addPatientcarer"
+      consumes:
+      - "application/json"
+      produces:
+      - "application/json"
+      parameters:
+      - name: "PatientId"
+        in: "path"
+        description: "ID of Patient to add carer(s)"
+        required: true
+        type: "string"   
+      - in: "body"
+        name: "body"
+        description: "Carer to be added to Patient Record.  Note: PatientId can be excluded from Payload, as new entry will default to the value provided by URL. Also note that this Carer Id will be auto-associated to CarerId in Patient record."
+        required: true
+        schema:
+          properties:
+            Carer:
+              $ref: '#/definitions/Carer'
+      responses:
+        200:
+          description: "Returns a message that refers to a Responseful execution."
+          schema:
+            $ref: "#/definitions/Response"   
+        405:
+          description: "Invalid input"                              
+  /patient/{PatientId}/carer/{entryId}:
+    put:
+      tags:
+      - "Patient"
+      summary: "Updates an existing Patient carer"
+      description: "Returns a Responseful execution message"
+      operationId: "updatePatientCarer"
+      consumes:
+      - "application/json"
+      produces:
+      - "application/json"
+      parameters:
+      - name: "PatientId"
+        in: "path"
+        description: "ID of Patient to update Medical carer"
+        required: true
+        type: "string"   
+      - name: "entryId"
+        in: "path"
+        description: "Medical carer entry Id to be updated in Patient Medical records"
+        required: true
+        type: "string"        
+      - in: "body"
+        name: "body"
+        description: "Patient Medical Carer to be upadated. Note: PatientId and Carer Id can be excluded from Payload, as all new entries will default to those values provided by URL."
+        required: true
+        schema:
+          properties:
+            Carer:
+              $ref: '#/definitions/Carer'
+      responses:
+        200:
+          description: "Returns a message that refers to a Responseful execution."
+          schema:
+            $ref: "#/definitions/Response"            
+        400:
+          description: "Invalid Patient Id supplied"
+        404:
+          description: "Patient not found"
+        405:
+          description: "Invalid Input"                                          
+
+securityDefinitions:
+  X-MyApp-Key:
+    type: "apiKey"
+    name: "api_key"
+    in: "header"
+definitions:
+  Physician:
+    type: "object"
+    required:
+    - "FullName"
+    - "MedicalSpeciality"
+    properties:
+      FullName:
+        type: "string"
+        example: "Mark Ridless"
+      MedicalSpeciality:
+        type: "string"
+        example: "Geriatric"
+  Patient:
+    type: "object"
+    required:
+    - "FullName"
+    properties:
+      FullName:
+        type: "string"
+        example: "John Mills"
+      Age:
+        type: "string"
+        example: "65"  
+      Address:
+        type: "string"
+        example: "25 Grenfell St, 5000, Adelaide, SA, Australia"  
+      Mobile:
+        type: "string"
+        example: "61558755883"  
+      Email:
+        type: "string"
+        example: "jmills@medrec.com"
+      ContactMethod:
+        type: "string"
+        example: "Email|SMS|VoiceCall|Carer"
+  Prescription:
+    type: "object"
+    properties:
+      Name:
+        type: "string"
+        example: "Treatment to reduce allergic rhinitis" 
+      PhysicianId:
+        type: "string"
+        example: "592bc1692f497f75335a89ad"
+      Notes:
+        type: "string"
+        example: "Keep medicine in the refrigerator." 
+      IssueDate:
+        type: "string"
+        example: "2017-05-22T09:00:00"        
+      Drug:
+        $ref: "#/definitions/Drug"
+      PatientId:
+        type: "string"
+        example: "592bc1692f497f75335a89ad"          
+  Drug:
+    type: "object"
+    properties:
+      Name:
+        type: "string"
+        example: "Aluminum Hydroxychloride" 
+      Dosage:
+        type: "string"
+        example: "500mg" 
+      Frequency:
+        type: "string"
+        example: "1 tablet every 8 hrs" 
+      Repeat:
+        type: "number"
+        example: "3" 
+      CurrentRepeat:
+        type: "number"
+        example: "1" 
+      Formula:
+        type: "string"
+        example: "Al2OH5Cl2H2"
+      SideEffects:
+        type: "array"
+        items:
+          $ref: "#/definitions/SideEffects"
+  SideEffects:
+    type: "object"
+    properties:
+      Name:
+        type: "string"
+        example: "Itching and Rash"
+      Description:
+        type: "string"
+        example: "An irritating skin sensation causing a desire to scratch"
+  Calendar:
+    type: "object"
+    properties:
+      Name:
+        type: "string"
+        example: "Conduct cerumen impaction removal"
+      StartTime:
+        type: "string"
+        example: "2017-05-22T09:00:00"
+      Duration:
+        type: "string"
+        example: "1h"
+      PhysicianId:
+        type: "string"
+        example: "592bc1692f497f75335a89ad"            
+  MedicalConsultation:
+    type: "object"
+    properties:
+      VisitReason:
+        type: "string"
+        example: "Severe cough" 
+      ConsultationDate:
+        type: "string"
+        example: "2017-05-22T09:00:00"        
+      SubjectiveNote:
+        type: "string"
+        example: "Patient complained about chest pain"         
+      Diagnosis:
+        type: "string"
+        example: "Chest infection"
+      PatientId:
+        type: "string"
+        example: "592bc1692f497f75335a89ad"           
+  MedicalAppointment:
+    type: "object"
+    properties:
+      Name:
+        type: "string"
+        example: "Check Chronic Rhinitis" 
+      PhysicianId:
+        type: "string"
+        example: "592bc1692f497f75335a89ad"        
+      AppointmentDate:
+        type: "string"
+        example: "2017-05-22T09:00:00"
+      AppointmentAddress:
+        type: "string"
+        example: "417, St. Kilda Rd, 3004, Melbourne, Australia"        
+      Duration:
+        type: "string"
+        example: "1h"
+      Notes:
+        type: "string"
+        example: "Bring previous medication names"
+      PatientId:
+        type: "string"
+        example: "592bc1692f497f75335a89ad"                
+  MedicalObservation:
+    type: "object"
+    properties:
+      Name:
+        type: "string"
+        example: "Blood Pressure" 
+      Unit:
+        type: "string"
+        example: "kg|c|f|bps" 
+      Value:
+        type: "number"
+        example: "76" 
+      Producer:
+        type: "string"
+        example: "Physician"
+      RecordingDevice:
+        type: "string"
+        example: "iHealth|SamsungWatch|Manual" 
+      Date:
+        type: "string"
+        example: "2017-05-22T09:00:00"
+      Notes:
+        type: "string"
+        example: "Observation taken while relaxed and seated for a while."
+      PatientId:
+        type: "string"
+        example: "592bc1692f497f75335a89ad"         
+  Carer:
+    type: "object"
+    properties:
+      FullName:
+        type: "string"
+        example: "Jenny Mills" 
+      Email:
+        type: "string"
+        example: "jenny.mills@gmail.com"
+      Mobile:
+        type: "string"
+        example: "61888995500"
+      Relationship:
+        type: "string"
+        example: "Daughter"        
+      PatientId:
+        type: "string"
+        example: "592bc1692f497f75335a89ad"          
+  Response:
+    type: "object"
+    properties:
+      Message:
+        type: "string"
+        example: "Success|Error occured..."        
+externalDocs:
+  description: "Find out more about Oracle PaaS"
+  url: "http://redthunder.blog"
+  
+  

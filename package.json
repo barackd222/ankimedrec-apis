@@ -1,0 +1,26 @@
+{
+  "name": "ankimedrec-swaggerui",
+  "version": "1.0.0",
+  "description": "Anki-Medrec Swagger UI",
+  "main": "app.js",
+  "scripts": {
+    "start": "node app.js"
+  },
+  "keywords": [
+    "swagger",
+    "api",
+    "anki",
+    "medrec"
+  ],
+  "author": "Carlos Rodriguez Iturria",
+  "license": "MIT",
+  "engines" : { "node" : ">=4.1.0 <5.5.0" },
+  "dependencies": {
+    "body-parser": "^1.6.5",
+    "express": "^4.8.5",    
+    "mongodb": "^2.2.24",
+    "monk": "^4.0.0",
+    "js-yaml": "^3.8.4"
+  }
+}
+

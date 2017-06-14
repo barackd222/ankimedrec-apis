@@ -1,0 +1,8 @@
+{
+  "runtime":{
+    "majorVersion":"4.8.0"
+  },
+  "command": "node app.js",
+  "release": {},
+  "notes": ""
+}
