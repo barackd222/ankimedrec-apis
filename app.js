@@ -2,8 +2,9 @@
 var config = require('./config');
 var server = require('./server');
 
-if(config.MONGODB_SERVER === undefined){
-    config.MONGODB_SERVER = "localhost";
+if(config.API_GW === undefined || config.MONGODB_SERVER === undefined || config.MONGODB_PORT === undefined){
+    console.log('Invalid properties. Please verify config properties file and try again.');
+    process.exit();
 }
 
 server.listen(config.port, function() {
@@ -11,5 +12,5 @@ server.listen(config.port, function() {
 
     // Temp:
     console.log("MongoDB Server is [" + config.MONGODB_SERVER +
-     "], MongoDB Port is [" + config.MONGODB_PORT + "]");
+     "], MongoDB Port is [" + config.MONGODB_PORT + "], API GW is [" + config.API_GW + "]");
 });

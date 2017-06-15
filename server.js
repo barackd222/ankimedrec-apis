@@ -12,13 +12,16 @@ var app = express();
 // New Code
 var mongo = require('mongodb');
 var monk = require('monk');
-var db = monk(config.MONGODB_SERVER + ':' + config.MONGODB_PORT + '/s2viia_contacts');
+var db = monk(config.MONGODB_SERVER + ':' + config.MONGODB_PORT + '/medrec');
 
 // Converting YAML into JSON for Swagger UI loading purposes:
 var inputfile = 'anki-medrec.yml',
     outputfile = 'anki-medrec.json';
 
 swaggerFileDef = yaml.load(fs.readFileSync(inputfile, { encoding: 'utf-8' }));
+
+// Updating the Swagger host to the one defined in the config file:
+swaggerFileDef.host = config.API_GW;
 
 // Storing YAML -> JSON Format for visibility purposes:
 fs.writeFileSync(outputfile, JSON.stringify(swaggerFileDef, null, 2));
