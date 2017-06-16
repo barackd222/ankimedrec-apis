@@ -24,7 +24,7 @@ tags:
     description: "Find out more"
     url: "http://anki-medrec.oracleau.cloud"
 schemes:
-- "https"
+- "http"
 paths:
   /physicians:
     get:
