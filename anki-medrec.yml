@@ -11,7 +11,7 @@ info:
   #  url: "http://www.apache.org/licenses/LICENSE-2.0.html"
 #host: "dev-apis.oracleau.cloud"
 #basePath: "/v1"
-host: "dev-apis.oracleau.cloud:3006"
+host: "localhost:3000"
 tags:
 - name: "Physician"
   description: "Physician is the person qualified to practise medicine, especially one who specialises in diagnosis and medical treatment."
@@ -24,7 +24,7 @@ tags:
     description: "Find out more"
     url: "http://anki-medrec.oracleau.cloud"
 schemes:
-- "http"
+- "https"
 paths:
   /physicians:
     get:
