@@ -23,6 +23,7 @@ swaggerFileDef = yaml.load(fs.readFileSync(inputfile, { encoding: 'utf-8' }));
 // Updating the Swagger host to the one defined in the config file:
 swaggerFileDef.host = config.API_GW;
 
+
 // Storing YAML -> JSON Format for visibility purposes:
 fs.writeFileSync(outputfile, JSON.stringify(swaggerFileDef, null, 2));
 
@@ -55,6 +56,11 @@ app.use(function (req, res, next) {
 
 //Include the html assets
 app.get('/anki-medrec-ext-apis/v1', function (req, res) {
+
+    // Updating the Host file dynamically:
+    swaggerFileDef.host = "" + req.headers.host;
+
+    // Returning swagger definition:
     res.send(swaggerFileDef);
 });
 

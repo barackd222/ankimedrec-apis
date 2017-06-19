@@ -12,5 +12,5 @@ server.listen(config.port, function() {
 
     // Temp:
     console.log("MongoDB Server is [" + config.MONGODB_SERVER +
-     "], MongoDB Port is [" + config.MONGODB_PORT + "], API GW is [" + config.API_GW + "]");
+     "], MongoDB Port is [" + config.MONGODB_PORT + "]");
 });

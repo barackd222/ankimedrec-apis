@@ -79,43 +79,6 @@ module.exports = function (app) {
         });
     });
 
-    /* POST to Add Physician */
-    app.post('/physician', function (req, res) {
-
-        var DB_COLLECTION_NAME = "physicians";
-        // Set our internal DB variable
-        var db = req.db;
-        var physician = req.body;
-
-        if (physician == null || physician == undefined) {
-            log("POST", "/physician", "Physician payload detected but no physician on it... Nothing to do...");
-            res.status(400).end();//Bad request...
-            return;
-        }
-
-        log("POST", "/physician", "Physician to be inserted is [" + JSON.stringify(physician) + "]");
-
-        // Set collection
-        var collection = db.get(DB_COLLECTION_NAME);
-
-        // Insert row to MongoDB
-        collection.insert(physician, function (err, doc) {
-            if (err) {
-                log("POST", "/physician", "Oops, something wrong just happened.");
-                res.send({
-                    Message: 'Oops, something wrong just happened.'
-                });
-            }
-            else {
-                // Return succes answer
-                log("POST", "/physician", "Records were added successfully...");
-                res.send({
-                    Message: 'Records were added successfully...'
-                });
-            }
-        });
-    });
-
     /* GET Physician by Id */
     app.get('/physician/:PhysicianId', function (req, res) {
 

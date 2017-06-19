@@ -25,6 +25,7 @@ tags:
     url: "http://anki-medrec.oracleau.cloud"
 schemes:
 - "http"
+- "https"
 paths:
   /physicians:
     get:
@@ -80,31 +81,6 @@ paths:
           description: "Returns a message that refers to a Responseful execution."
           schema:
             $ref: "#/definitions/Response"      
-        405:
-          description: "Invalid input"
-  /physician:
-    post:
-      tags:
-      - "Physician"
-      summary: "Adds a new Physician"
-      description: "Returns a Responseful execution message"
-      operationId: "addPhysician"
-      consumes:
-      - "application/json"
-      produces:
-      - "application/json"
-      parameters:
-      - in: "body"
-        name: "body"
-        description: "Physician to be added. Incoming Body requires full Physician attributes, excluding Physician Id."
-        required: true
-        schema:
-          $ref: "#/definitions/Physician"
-      responses:
-        200:
-          description: "Returns a message that refers to a Responseful execution."
-          schema:
-            $ref: "#/definitions/Response"   
         405:
           description: "Invalid input"
   /physician/{PhysicianId}:
