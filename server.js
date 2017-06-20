@@ -12,7 +12,10 @@ var app = express();
 // New Code
 var mongo = require('mongodb');
 var monk = require('monk');
-var db = monk(config.MONGODB_SERVER + ':' + config.MONGODB_PORT + '/medrec');
+
+var MONGODB_SERVER = config.RUNNING_MODE.toUpperCase() === 'DOCKER' ? "mongo" : "localhost";
+console.log("Expecting MongoDB at [" + config.RUNNING_MODE.toUpperCase() + "], lcoation [" + MONGODB_SERVER + "]");
+var db = monk(MONGODB_SERVER + ':' + config.MONGODB_PORT + '/medrec');
 
 // Converting YAML into JSON for Swagger UI loading purposes:
 var inputfile = 'anki-medrec.yml',
