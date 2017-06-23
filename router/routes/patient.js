@@ -122,7 +122,7 @@ module.exports = function (app) {
                 // Return succes answer
                 log("POST", "/patients", "Records were added successfully...");
                 res.send({
-                    Message: 'Records were added successfully...'
+                    Patients: doc
                 });
             }
         });
@@ -362,7 +362,7 @@ module.exports = function (app) {
                 // Return succes answer
                 log("POST", "/patient/:PatientId/consultations", "Records were added successfully...");
                 res.send({
-                    Message: 'Records were added successfully...'
+                    MedicalConsultations: doc
                 });
             }
         });
@@ -509,7 +509,7 @@ module.exports = function (app) {
                 // Return succes answer
                 log("POST", "/patient/:PatientId/appointments", "Records were added successfully...");
                 res.send({
-                    Message: 'Records were added successfully...'
+                    Appointments: doc
                 });
             }
         });
@@ -655,7 +655,7 @@ module.exports = function (app) {
                 // Return succes answer
                 log("POST", "/patient/:PatientId/prescriptions", "Records were added successfully...");
                 res.send({
-                    Message: 'Records were added successfully...'
+                    Prescriptions: doc
                 });
             }
         });
@@ -802,7 +802,7 @@ module.exports = function (app) {
                 // Return succes answer
                 log("POST", "/patient/:PatientId/observations", "Records were added successfully...");
                 res.send({
-                    Message: 'Records were added successfully...'
+                    MedicalObservations: doc
                 });
             }
         });
@@ -932,6 +932,7 @@ module.exports = function (app) {
         // Set collection
         var collection = db.get(DB_COLLECTION_NAME);
         var carerId = null;
+        var newCarer = null;
 
         // Insert row to MongoDB
         collection.insert(carer, function (err, doc) {
@@ -943,6 +944,7 @@ module.exports = function (app) {
             }
             else {
 
+                newCarer = doc;
                 carerId = doc._id;
                 log("POST", "/patient/:PatientId/carer", "Carer [" + carerId + "] was added successfully...");
 
@@ -980,7 +982,7 @@ module.exports = function (app) {
                             // Return succes answer
                             log("PUT", "/patient/carer", "Patient CarerId was updated successfully...");
                             res.send({
-                                Message: 'Records were updated successfully...'
+                                Carer: newCarer
                             });
                         }
                     });

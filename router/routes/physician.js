@@ -73,7 +73,7 @@ module.exports = function (app) {
                 // Return succes answer
                 log("POST", "/physicians", "Records were added successfully...");
                 res.send({
-                    Message: 'Records were added successfully...'
+                    Physicians: doc
                 });
             }
         });
@@ -280,7 +280,7 @@ module.exports = function (app) {
                 // Return succes answer
                 log("POST", "/physician/:PhysicianId/calendar", "Records were added successfully...");
                 res.send({
-                    Message: 'Records were added successfully...'
+                    Calendar: doc
                 });
             }
         });

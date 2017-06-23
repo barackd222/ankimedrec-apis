@@ -1,6 +1,6 @@
 {
     "API_GW":"NA",
-    "RUNNING_MODE":"physical",
+    "MONGODB_SERVER_LOCATION":"localhost",
     "MONGODB_PORT":"27017",
     "PORT":"3000"
 }

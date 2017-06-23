@@ -80,7 +80,18 @@ paths:
         200:
           description: "Returns a message that refers to a Responseful execution."
           schema:
-            $ref: "#/definitions/Response"      
+            properties:
+              Physicians:
+                type: "array"
+                items:
+                  allOf:
+                    - properties:
+                        _id:
+                          type: "string"
+                          minLength: 24
+                          maxLength: 24
+                          example: "ID-GOES-HERE"
+                    - $ref: "#/definitions/Physician"    
         405:
           description: "Invalid input"
   /physician/{PhysicianId}:
@@ -266,7 +277,18 @@ paths:
         200:
           description: "Returns a message that refers to a Responseful execution."
           schema:
-            $ref: "#/definitions/Response"   
+            properties:
+              Calendar:
+                type: "array"
+                items:
+                  allOf:
+                    - properties:
+                        _id:
+                          type: "string"
+                          minLength: 24
+                          maxLength: 24
+                          example: "ID-GOES-HERE"
+                    - $ref: "#/definitions/Calendar"
         405:
           description: "Invalid input"          
   /physician/{PhysicianId}/calendar/{entryId}:
@@ -367,7 +389,23 @@ paths:
         200:
           description: "Returns a message that refers to a Responseful execution."
           schema:
-            $ref: "#/definitions/Response"      
+            properties:
+              Patients:
+                type: "array"
+                items:
+                  allOf:
+                    - properties:
+                        _id:
+                          type: "string"
+                          minLength: 24
+                          maxLength: 24
+                          example: "ID-GOES-HERE"
+                        CarerId:
+                          type: "string"
+                          minLength: 24
+                          maxLength: 24
+                          example: "ID-GOES-HERE"                           
+                    - $ref: "#/definitions/Patient"  
         405:
           description: "Invalid input"
   /patient:
@@ -576,7 +614,23 @@ paths:
         200:
           description: "Returns a message that refers to a Responseful execution."
           schema:
-            $ref: "#/definitions/Response"   
+            properties:
+              MedicalConsultations:
+                type: "array"
+                items:
+                  allOf:
+                    - properties:
+                        _id:
+                          type: "string"
+                          minLength: 24
+                          maxLength: 24
+                          example: "ID-GOES-HERE"
+                        CarerId:
+                          type: "string"
+                          minLength: 24
+                          maxLength: 24
+                          example: "ID-GOES-HERE"
+                    - $ref: "#/definitions/MedicalConsultation"   
         405:
           description: "Invalid input"          
   /patient/{PatientId}/consultations/{entryId}: 
@@ -688,7 +742,18 @@ paths:
         200:
           description: "Returns a message that refers to a Responseful execution."
           schema:
-            $ref: "#/definitions/Response"   
+            properties:
+              Appointments:
+                type: "array"
+                items:
+                  allOf:
+                    - properties:
+                        _id:
+                          type: "string"
+                          minLength: 24
+                          maxLength: 24
+                          example: "ID-GOES-HERE"
+                    - $ref: "#/definitions/MedicalAppointment"   
         405:
           description: "Invalid input"          
   /patient/{PatientId}/appointments/{entryId}:
@@ -800,7 +865,18 @@ paths:
         200:
           description: "Returns a message that refers to a Responseful execution."
           schema:
-            $ref: "#/definitions/Response"   
+            properties:
+              Prescriptions:
+                type: "array"
+                items:
+                  allOf:
+                    - properties:
+                        _id:
+                          type: "string"
+                          minLength: 24
+                          maxLength: 24
+                          example: "ID-GOES-HERE"
+                    - $ref: "#/definitions/Prescription"
         405:
           description: "Invalid input"          
   /patient/{PatientId}/prescriptions/{entryId}:
@@ -912,7 +988,18 @@ paths:
         200:
           description: "Returns a message that refers to a Responseful execution."
           schema:
-            $ref: "#/definitions/Response"   
+            properties:
+              MedicalObservations:
+                type: "array"
+                items:
+                  allOf:
+                    - properties:
+                        _id:
+                          type: "string"
+                          minLength: 24
+                          maxLength: 24
+                          example: "ID-GOES-HERE"
+                    - $ref: "#/definitions/MedicalObservation"
         405:
           description: "Invalid input"          
   /patient/{PatientId}/observations/{entryId}:
@@ -1016,7 +1103,16 @@ paths:
         200:
           description: "Returns a message that refers to a Responseful execution."
           schema:
-            $ref: "#/definitions/Response"   
+            properties:
+              Carer:
+                allOf:
+                  - properties:
+                      _id:
+                        type: "string"
+                        minLength: 24
+                        maxLength: 24
+                        example: "ID-GOES-HERE"
+                  - $ref: '#/definitions/Carer'
         405:
           description: "Invalid input"                              
   /patient/{PatientId}/carer/{entryId}:
