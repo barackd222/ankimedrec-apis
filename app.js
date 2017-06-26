@@ -10,7 +10,7 @@ if(config.API_GW === undefined || config.MONGODB_SERVER_LOCATION === undefined |
 var port = (process.env.PORT || config.PORT);
 
 server.listen(port, function() {
-    console.log('Anki-MedRec API server running on port ' + config.PORT);
+    console.log('Anki-MedRec API server running on port ' + port);
 
     // Temp:
     console.log("MongoDB Server is [" + config.MONGODB_SERVER_LOCATION + "], MongoDB Port is [" + config.MONGODB_PORT + "]");
