@@ -12,8 +12,18 @@ var app = express();
 // New Code
 var mongo = require('mongodb');
 var monk = require('monk');
+var MONGODB_CREDENTIALS = "";
 
-var db = monk(config.MONGODB_SERVER_LOCATION + ':' + config.MONGODB_PORT + '/medrec');
+if (config.MONGODB_USERNAME != "NA" && config.MONGODB_PASSWORD != "NA") {
+
+    MONGODB_CREDENTIALS = config.MONGODB_USERNAME + ":" + config.MONGODB_PASSWORD + "@";
+    console.log("Connecting to MongoDB with username [" + config.MONGODB_USERNAME + "]");
+} else {
+    console.log("Connecting to MongoDB without credentials, if you wish to set credentials, set them in the config JSON file");
+}
+
+
+var db = monk(MONGODB_CREDENTIALS + config.MONGODB_SERVER_LOCATION + ':' + config.MONGODB_PORT + '/medrec');
 
 // Converting YAML into JSON for Swagger UI loading purposes:
 var inputfile = 'anki-medrec.yml',

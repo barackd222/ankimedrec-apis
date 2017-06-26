@@ -1,6 +1,8 @@
 {
     "API_GW":"NA",
-    "MONGODB_SERVER_LOCATION":"localhost",
+    "MONGODB_SERVER_LOCATION":"localhost",    
     "MONGODB_PORT":"27017",
+    "MONGODB_USERNAME":"NA",
+    "MONGODB_PASSWORD":"NA",
     "PORT":"3000"
 }
