@@ -7,7 +7,9 @@ if(config.API_GW === undefined || config.MONGODB_SERVER_LOCATION === undefined |
     process.exit();
 }
 
-server.listen(config.PORT, function() {
+var port = (process.env.PORT || config.PORT);
+
+server.listen(port, function() {
     console.log('Anki-MedRec API server running on port ' + config.PORT);
 
     // Temp:
