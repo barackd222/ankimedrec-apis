@@ -2,8 +2,6 @@ var path = require('path');
 var express = require('express');
 var bodyParser = require('body-parser');
 var config = require("../../config");
-var http = require('http');
-var https = require('https');
 
 //CRI change:
 var bodyParser = require('body-parser');
@@ -28,7 +26,11 @@ module.exports = function (app) {
     /* GET Physicians. */
     app.get('/physicians', function (req, res) {
 
-        var DB_COLLECTION_NAME = "physicians";
+        var appKey = req.get("X-App-Key");
+        var appKey = appKey != null && appKey != undefined ? appKey : "";
+        console.log("X-App-Key used is [" + appKey + "]");
+
+        var DB_COLLECTION_NAME = "" + appKey + "physicians";
         var db = req.db;
 
         log("GET", "/physicians", "DB_COLLECTION_NAME [" + DB_COLLECTION_NAME + "]");
@@ -40,12 +42,18 @@ module.exports = function (app) {
             res.send({ "Physicians": docs });
 
         });
+
+
     });
 
     /* POST Physicians */
     app.post('/physicians', function (req, res) {
 
-        var DB_COLLECTION_NAME = "physicians";
+        var appKey = req.get("X-App-Key");
+        var appKey = appKey != null && appKey != undefined ? appKey : "";
+        console.log("X-App-Key used is [" + appKey + "]");
+
+        var DB_COLLECTION_NAME = "" + appKey + "physicians";
         // Set our internal DB variable
         var db = req.db;
         var physicians = req.body.Physicians;
@@ -59,6 +67,7 @@ module.exports = function (app) {
         log("POST", "/physicians", "Array of physicians to be inserted is [" + JSON.stringify(physicians) + "]");
 
         // Set collection
+        log("POST", "/physicians", "DB_COLLECTION_NAME [" + DB_COLLECTION_NAME + "]");
         var collection = db.get(DB_COLLECTION_NAME);
 
         // Insert row to MongoDB
@@ -80,38 +89,46 @@ module.exports = function (app) {
     });
 
     /* GET Physician by Id */
-    app.get('/physician/:PhysicianId', function (req, res) {
+    app.get('/physicians/:PhysicianId', function (req, res) {
 
-        var DB_COLLECTION_NAME = "physicians";
+        var appKey = req.get("X-App-Key");
+        var appKey = appKey != null && appKey != undefined ? appKey : "";
+        console.log("X-App-Key used is [" + appKey + "]");
+        
+        var DB_COLLECTION_NAME = "" + appKey + "physicians";
         var id = req.params.PhysicianId;
 
         if (id == null || id == undefined) {
-            log("GET", "/physician/:PhysicianId", "Id empty or invalid... Nothing to do...");
+            log("GET", "/physicians/:PhysicianId", "Id empty or invalid... Nothing to do...");
             res.status(400).end();//Bad request...
             return;
         }
 
         var db = req.db;
 
-        log("GET", "/physician/:PhysicianId", "DB_COLLECTION_NAME [" + DB_COLLECTION_NAME + "]");
+        log("GET", "/physicians/:PhysicianId", "DB_COLLECTION_NAME [" + DB_COLLECTION_NAME + "]");
         var collection = db.get(DB_COLLECTION_NAME);
 
         collection.find({ "_id": id }, {}, function (e, docs) {
 
-            log("GET", "/physician/:PhysicianId", "Found: [" + JSON.stringify(docs) + "]");
+            log("GET", "/physicians/:PhysicianId", "Found: [" + JSON.stringify(docs) + "]");
             res.send(docs);
 
         });
     });
 
     /* PUT a Physician by Id */
-    app.put('/physician/:PhysicianId', function (req, res) {
+    app.put('/physicians/:PhysicianId', function (req, res) {
 
-        var DB_COLLECTION_NAME = "physicians";
+        var appKey = req.get("X-App-Key");
+        var appKey = appKey != null && appKey != undefined ? appKey : "";
+        console.log("X-App-Key used is [" + appKey + "]");
+
+        var DB_COLLECTION_NAME = "" + appKey + "physicians";
         var id = req.params.PhysicianId;
 
         if (id == null || id == undefined) {
-            log("PUT", "/physician/:PhysicianId", "Id empty or invalid... Nothing to do...");
+            log("PUT", "/physicians/:PhysicianId", "Id empty or invalid... Nothing to do...");
             res.status(400).end();//Bad request...
             return;
         }
@@ -121,27 +138,28 @@ module.exports = function (app) {
         var physician = req.body;
 
         if (physician == null || physician == undefined) {
-            log("PUT", "/physician/:PhysicianId", "Physician payload detected but no physician on it... Nothing to do...");
+            log("PUT", "/physicians/:PhysicianId", "Physician payload detected but no physician on it... Nothing to do...");
             res.status(400).end();//Bad request...
             return;
         }
 
-        log("PUT", "/physician/:PhysicianId", "Physician to be inserted is [" + JSON.stringify(physician) + "]");
+        log("PUT", "/physicians/:PhysicianId", "Physician to be inserted is [" + JSON.stringify(physician) + "]");
 
         // Set collection
+        log("PUT", "/physicians/:PhysicianId", "DB_COLLECTION_NAME [" + DB_COLLECTION_NAME + "]");        
         var collection = db.get(DB_COLLECTION_NAME);
 
         // Update row to MongoDB
         collection.update({ "_id": id }, physician, function (err, doc) {
             if (err) {
-                log("PUT", "/physician/:PhysicianId", "Oops, something wrong just happened.");
+                log("PUT", "/physicians/:PhysicianId", "Oops, something wrong just happened.");
                 res.send({
                     Message: 'Oops, something wrong just happened.'
                 });
             }
             else {
                 // Return succes answer
-                log("PUT", "/physician/:PhysicianId", "Records were updated successfully...");
+                log("PUT", "/physicians/:PhysicianId", "Records were updated successfully...");
                 res.send({
                     Message: 'Records were updated successfully...'
                 });
@@ -151,94 +169,111 @@ module.exports = function (app) {
 
 
     /* Delete Physician by Id */
-    app.delete('/physician/:PhysicianId', function (req, res) {
+    app.delete('/physicians/:PhysicianId', function (req, res) {
 
-        var DB_COLLECTION_NAME = "physicians";
+        var appKey = req.get("X-App-Key");
+        var appKey = appKey != null && appKey != undefined ? appKey : "";
+        console.log("X-App-Key used is [" + appKey + "]");
+
+        var DB_COLLECTION_NAME = "" + appKey + "physicians";
         var id = req.params.PhysicianId;
 
         if (id == null || id == undefined) {
-            log("DELETE", "/physician/:PhysicianId", "Id empty or invalid... Nothing to do...");
+            log("DELETE", "/physicians/:PhysicianId", "Id empty or invalid... Nothing to do...");
             res.status(400).end();//Bad request...
             return;
         }
 
         var db = req.db;
 
+        log("DELETE", "/physicians/:PhysicianId", "DB_COLLECTION_NAME [" + DB_COLLECTION_NAME + "]");
         var collection = db.get(DB_COLLECTION_NAME);
 
-        log("DELETE", "/physician/:PhysicianId", "Collection to be removed by Id [" + id + "]");
+        log("DELETE", "/physicians/:PhysicianId", "Collection to be removed by Id [" + id + "]");
 
         //Remove all documents:
         collection.remove({ "_id": id });
 
         // Return succes answer
-        log("DELETE", "/physician/:PhysicianId", "Record with Id [" + id + "] was deleted successfully...");
+        log("DELETE", "/physicians/:PhysicianId", "Record with Id [" + id + "] was deleted successfully...");
         res.send({
             Message: 'Record with Id [' + id + '] was deleted successfully...'
         });
     });
 
     /* GET Physician Prescriptions by Id */
-    app.get('/physician/:PhysicianId/prescriptions', function (req, res) {
+    app.get('/physicians/:PhysicianId/prescriptions', function (req, res) {
 
-        var DB_COLLECTION_NAME = "prescriptions";
+        var appKey = req.get("X-App-Key");
+        var appKey = appKey != null && appKey != undefined ? appKey : "";
+        console.log("X-App-Key used is [" + appKey + "]");
+
+        var DB_COLLECTION_NAME = "" + appKey + "prescriptions";
         var id = req.params.PhysicianId;
 
         if (id == null || id == undefined) {
-            log("GET", "/physician/:PhysicianId/prescriptions", "Id empty or invalid... Nothing to do...");
+            log("GET", "/physicians/:PhysicianId/prescriptions", "Id empty or invalid... Nothing to do...");
             res.status(400).end();//Bad request...
             return;
         }
 
         var db = req.db;
 
-        log("GET", "/physician/:PhysicianId/prescriptions", "DB_COLLECTION_NAME [" + DB_COLLECTION_NAME + "]");
+        log("GET", "/physicians/:PhysicianId/prescriptions", "DB_COLLECTION_NAME [" + DB_COLLECTION_NAME + "]");
         var collection = db.get(DB_COLLECTION_NAME);
 
         collection.find({ "PhysicianId": id }, {}, function (e, docs) {
 
-            log("GET", "/physician/:PhysicianId/prescriptions", "Found: [" + JSON.stringify(docs) + "]");
+            log("GET", "/physicians/:PhysicianId/prescriptions", "Found: [" + JSON.stringify(docs) + "]");
             res.send(docs);
 
         });
     });
 
     /* GET Physician Calendar by Id */
-    app.get('/physician/:PhysicianId/calendar', function (req, res) {
+    app.get('/physicians/:PhysicianId/calendar', function (req, res) {
 
-        var DB_COLLECTION_NAME = "calendar";
+        var appKey = req.get("X-App-Key");
+        var appKey = appKey != null && appKey != undefined ? appKey : "";
+        console.log("X-App-Key used is [" + appKey + "]");
+
+        var DB_COLLECTION_NAME = "" + appKey + "calendar";
         var id = req.params.PhysicianId;
 
         if (id == null || id == undefined) {
-            log("GET", "/physician/:PhysicianId/calendar", "Id empty or invalid... Nothing to do...");
+            log("GET", "/physicians/:PhysicianId/calendar", "Id empty or invalid... Nothing to do...");
             res.status(400).end();//Bad request...
             return;
         }
 
         var db = req.db;
 
-        log("GET", "/physician/:PhysicianId/calendar", "DB_COLLECTION_NAME [" + DB_COLLECTION_NAME + "]");
+        log("GET", "/physicians/:PhysicianId/calendar", "DB_COLLECTION_NAME [" + DB_COLLECTION_NAME + "]");
         var collection = db.get(DB_COLLECTION_NAME);
 
         collection.find({ "PhysicianId": id }, {}, function (e, docs) {
 
-            log("GET", "/physician/:PhysicianId/calendar", "Found: [" + JSON.stringify(docs) + "]");
+            log("GET", "/physicians/:PhysicianId/calendar", "Found: [" + JSON.stringify(docs) + "]");
             res.send({ Calendar: docs });
 
         });
     });
 
     /* POST to Add Physician Calendar Entries */
-    app.post('/physician/:PhysicianId/calendar', function (req, res) {
+    app.post('/physicians/:PhysicianId/calendar', function (req, res) {
 
-        var DB_COLLECTION_NAME = "calendar";
+        var appKey = req.get("X-App-Key");
+        var appKey = appKey != null && appKey != undefined ? appKey : "";
+        console.log("X-App-Key used is [" + appKey + "]");
+
+        var DB_COLLECTION_NAME = "" + appKey + "calendar";
         // Set our internal DB variable
         var db = req.db;
 
         var id = req.params.PhysicianId;
 
         if (id == null || id == undefined) {
-            log("POST", "/physician/:PhysicianId/calendar", "Id empty or invalid... Nothing to do...");
+            log("POST", "/physicians/:PhysicianId/calendar", "Id empty or invalid... Nothing to do...");
             res.status(400).end();//Bad request...
             return;
         }
@@ -247,7 +282,7 @@ module.exports = function (app) {
         var calendar = req.body.Calendar;
 
         if (calendar == null || calendar == undefined) {
-            log("POST", "/physician/:PhysicianId/calendar", "Physician payload detected but no physician calendar on it... Nothing to do...");
+            log("POST", "/physicians/:PhysicianId/calendar", "Physician payload detected but no physician calendar on it... Nothing to do...");
             res.status(400).end();//Bad request...
             return;
         }
@@ -263,22 +298,23 @@ module.exports = function (app) {
         }
 
 
-        log("POST", "/physician/:PhysicianId/calendar", "Physician calendar entry to be inserted is [" + JSON.stringify(calendar) + "]");
+        log("POST", "/physicians/:PhysicianId/calendar", "Physician calendar entry to be inserted is [" + JSON.stringify(calendar) + "]");
 
         // Set collection
+        log("POST", "/physicians/:PhysicianId/calendar", "DB_COLLECTION_NAME [" + DB_COLLECTION_NAME + "]");
         var collection = db.get(DB_COLLECTION_NAME);
 
         // Insert row to MongoDB
         collection.insert(calendar, function (err, doc) {
             if (err) {
-                log("POST", "/physician/:PhysicianId/calendar", "Oops, something wrong just happened.");
+                log("POST", "/physicians/:PhysicianId/calendar", "Oops, something wrong just happened.");
                 res.send({
                     Message: 'Oops, something wrong just happened.'
                 });
             }
             else {
                 // Return succes answer
-                log("POST", "/physician/:PhysicianId/calendar", "Records were added successfully...");
+                log("POST", "/physicians/:PhysicianId/calendar", "Records were added successfully...");
                 res.send({
                     Calendar: doc
                 });
@@ -287,9 +323,13 @@ module.exports = function (app) {
     });
 
     /* PUT to Add Physician Calendar Entries */
-    app.put('/physician/:PhysicianId/calendar/:entryId', function (req, res) {
+    app.put('/physicians/:PhysicianId/calendar/:entryId', function (req, res) {
 
-        var DB_COLLECTION_NAME = "calendar";
+        var appKey = req.get("X-App-Key");
+        var appKey = appKey != null && appKey != undefined ? appKey : "";
+        console.log("X-App-Key used is [" + appKey + "]");
+
+        var DB_COLLECTION_NAME = "" + appKey + "calendar";
         // Set our internal DB variable
         var db = req.db;
 
@@ -298,17 +338,17 @@ module.exports = function (app) {
         var calendar = req.body.Entry;
 
         if (physicianId == null || physicianId == undefined) {
-            log("PUT", "/physician/:PhysicianId/calendar", "PhysicianId empty or invalid... Nothing to do...");
+            log("PUT", "/physicians/:PhysicianId/calendar", "PhysicianId empty or invalid... Nothing to do...");
             res.status(400).end();//Bad request...
             return;
         }
         if (entryId == null || entryId == undefined) {
-            log("PUT", "/physician/:PhysicianId/calendar", "Calendar entryId empty or invalid... Nothing to do...");
+            log("PUT", "/physicians/:PhysicianId/calendar", "Calendar entryId empty or invalid... Nothing to do...");
             res.status(400).end();//Bad request...
             return;
         }
         if (calendar == null || calendar == undefined) {
-            log("PUT", "/physician/:PhysicianId/calendar", "Physician payload detected but no physician calendar on it... Nothing to do...");
+            log("PUT", "/physicians/:PhysicianId/calendar", "Physician payload detected but no physician calendar on it... Nothing to do...");
             res.status(400).end();//Bad request...
             return;
         }
@@ -321,22 +361,23 @@ module.exports = function (app) {
         calendar.PhysicianId = physicianId;
 
 
-        log("PUT", "/physician/:PhysicianId/calendar", "Physician calendar entry to be inserted is [" + JSON.stringify(calendar) + "]");
+        log("PUT", "/physicians/:PhysicianId/calendar", "Physician calendar entry to be inserted is [" + JSON.stringify(calendar) + "]");
 
         // Set collection
+        log("PUT", "/physicians/:PhysicianId/calendar", "DB_COLLECTION_NAME [" + DB_COLLECTION_NAME + "]");
         var collection = db.get(DB_COLLECTION_NAME);
 
         // Insert row to MongoDB
         collection.update({ "_id": entryId }, calendar, function (err, doc) {
             if (err) {
-                log("PUT", "/physician/:PhysicianId/calendar", "Oops, something wrong just happened.");
+                log("PUT", "/physicians/:PhysicianId/calendar", "Oops, something wrong just happened.");
                 res.send({
                     Message: 'Oops, something wrong just happened.'
                 });
             }
             else {
                 // Return succes answer
-                log("PUT", "/physician/:PhysicianId/calendar", "Records were added successfully...");
+                log("PUT", "/physicians/:PhysicianId/calendar", "Records were added successfully...");
                 res.send({
                     Message: 'Records were added successfully...'
                 });
@@ -389,11 +430,12 @@ module.exports = function (app) {
 
 
         var DB_COLLECTION_NAME = collectionName;
-        
+
         var db = req.db;
+        log("DELETE", "/collection/:cname", "DB_COLLECTION_NAME [" + DB_COLLECTION_NAME + "]");
         var collection = db.get(DB_COLLECTION_NAME);
 
-        log("DELETE", "/collection/:cname", "Collection: [" + DB_COLLECTION_NAME + "]");
+        
 
         //Remove all documents:
         collection.remove();

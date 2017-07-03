@@ -2,16 +2,26 @@
 var config = require('./config');
 var server = require('./server');
 
-if(config.API_GW === undefined || config.MONGODB_SERVER_LOCATION === undefined || config.MONGODB_PORT === undefined){
-    console.log('Invalid properties. Please verify config properties file and try again.');
+if (config.MONGODB_SERVER === undefined ||
+    config.MONGODB_PORT === undefined ||
+    config.PORT === undefined) {
+    console.log('Invalid mandatory properties. Please verify config properties file ' +
+        'or environment variables and try again.');
     process.exit();
 }
 
-var port = (process.env.PORT || config.PORT);
+console.log("Configuration Parameters: ");
+console.log("API_GW_ENABLED=" + config.API_GW_ENABLED); 
+console.log("API_GW_SERVER=" + config.API_GW_SERVER); 
+console.log("API_GW_BASEURL=" + config.API_GW_BASEURL); 
+console.log("API_GW_PORT=" + config.API_GW_PORT);
+console.log("API_GW_USERNAME=" + config.API_GW_USERNAME);
+console.log("MONGODB_SERVER=" + config.MONGODB_SERVER);
+console.log("MONGODB_PORT=" + config.MONGODB_PORT);
+console.log("MONGODB_USERNAME=" + config.MONGODB_USERNAME);
+console.log("PORT=" + config.PORT);
 
-server.listen(port, function() {
-    console.log('Anki-MedRec API server running on port ' + port);
+ server.listen(config.PORT, function () {
 
-    // Temp:
-    console.log("MongoDB Server is [" + config.MONGODB_SERVER_LOCATION + "], MongoDB Port is [" + config.MONGODB_PORT + "]");
-});
+     console.log('Anki-MedRec API server running on port ' + config.PORT + "!!!");
+ });
