@@ -32,7 +32,7 @@ var inputfile = 'anki-medrec.yml',
 swaggerFileDef = yaml.load(fs.readFileSync(inputfile, { encoding: 'utf-8' }));
 
 // Storing YAML -> JSON Format for visibility purposes:
-fs.writeFileSync(outputfile, JSON.stringify(swaggerFileDef, null, 2));
+//fs.writeFileSync(outputfile, JSON.stringify(swaggerFileDef, null, 2));
 
 
 // Make our db accessible to our router
