@@ -1,0 +1,50 @@
+FROM ubuntu:16.04
+
+#
+# Update Ubuntu packages
+#
+RUN apt-get update 
+
+#
+# Install and Verify version of Node.js and NPM
+# 
+# On Ubuntu 16:04
+RUN apt-get -y install nodejs
+RUN nodejs --version
+RUN apt-get -y install npm
+RUN npm --version
+
+#
+# Install and Verify version of MongoDB Server
+# 
+RUN apt-get -y install mongodb
+RUN mongod --version
+RUN /etc/init.d/mongodb restart
+
+# 
+#
+# Install and Verify version of git
+# 
+#RUN apt-get -y install git
+#RUN git --version
+
+#
+# Create local user and home directory
+#
+RUN useradd -ms /bin/bash apidev
+USER apidev
+RUN mkdir /home/apidev/ankimedrec-apis
+WORKDIR /home/apidev/ankimedrec-apis
+
+# 
+# Copy medrecapi files (cloned from git) into docker image
+#
+COPY . /home/apidev/ankimedrec-apis
+#
+# If you need npm, don't use a base tag
+RUN npm install
+
+#EXPOSE 3000 27017
+EXPOSE 3000
+CMD ["node", "app.js"]
+

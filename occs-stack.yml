@@ -1,7 +1,7 @@
 version: 2
 services:
   web:
-    image: 'index.docker.io/dre32722/ankimedrec-apis:latest'
+    image: 'index.docker.io/barackd222/ankimedrec-apis:latest'
     ports:
       - '3000:3000/tcp'
     environment:
