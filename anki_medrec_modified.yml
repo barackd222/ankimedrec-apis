@@ -9,8 +9,8 @@ info:
   #license:
   #  name: "Apache 2.0"
   #  url: "http://www.apache.org/licenses/LICENSE-2.0.html"
-basePath: "/"
-host: "apip.oracleau.cloud/api/medrec"
+basePath: "/api/medrec/"
+host: "apip.oracleau.cloud"
 tags:
 - name: "Physician"
   description: "Physician is the person qualified to practise medicine, especially one who specialises in diagnosis and medical treatment."
@@ -1330,5 +1330,3 @@ definitions:
 externalDocs:
   description: "Find out more about Oracle PaaS"
   url: "http://redthunder.blog"
-  
-  
