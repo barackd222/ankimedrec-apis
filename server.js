@@ -15,7 +15,7 @@ var monk = require('monk');
 var MONGODB_CREDENTIALS = "";
 
 if ((config.MONGODB_USERNAME != null && config.MONGODB_PASSWORD != null &&
-    config.MONGODB_USERNAME != undefined && config.MONGODB_PASSWORD != undefined) &&
+        config.MONGODB_USERNAME != undefined && config.MONGODB_PASSWORD != undefined) &&
     config.MONGODB_USERNAME != "NA" && config.MONGODB_PASSWORD != "NA") {
 
     MONGODB_CREDENTIALS = config.MONGODB_USERNAME + ":" + config.MONGODB_PASSWORD + "@";
@@ -27,9 +27,8 @@ var db = monk(MONGODB_CREDENTIALS + config.MONGODB_SERVER + ':' + config.MONGODB
 
 // Converting YAML into JSON for Swagger UI loading purposes:
 var inputfile = 'anki-medrec.yml',
-    outputfile = 'anki-medrec.json';
-
-swaggerFileDef = yaml.load(fs.readFileSync(inputfile, { encoding: 'utf-8' }));
+    outputfile = 'anki-medrec.json',
+    swaggerFileDef = {};
 
 // Storing YAML -> JSON Format for visibility purposes:
 //fs.writeFileSync(outputfile, JSON.stringify(swaggerFileDef, null, 2));
@@ -64,12 +63,29 @@ app.use(function (req, res, next) {
 //Include the html assets
 app.get('/anki-medrec-ext-apis/v1', function (req, res) {
 
-    // Updating the Host location
+    console.log("Requesting [" + "/anki-medrec-ext-apis/v1" + "]");
+
+    // Uploading clean Swagger Definition file.
+    swaggerFileDef = yaml.load(fs.readFileSync(inputfile, {
+        encoding: 'utf-8'
+    }));
+
+    // Issuing dynamic updates:
+    var isAPIGWSecured = false;
+
+    /**
+     * 1. Updating the Host location
+     */
     if (config.API_GW_ENABLED != null &&
         config.API_GW_ENABLED != undefined &&
         config.API_GW_ENABLED == "true") {
 
+        console.log("API_GW_ENABLED");
+
         swaggerFileDef.host = config.API_GW_SERVER + config.API_GW_BASEURL;
+
+        // API GAteway is enabled, thus we default to HTTPS as first option:
+        isAPIGWSecured = true;
 
     } else {
 
@@ -77,12 +93,139 @@ app.get('/anki-medrec-ext-apis/v1', function (req, res) {
         swaggerFileDef.host = "" + req.headers.host;
     }
 
+    /**
+     * 2. Updating the default Scheme to use (i.e. HTTP or HTTPS)
+     */
+    if (isAPIGWSecured) {
+
+        console.log("Default HTTPS over HTTP");
+
+        // Swap and default HTTPS as first option:
+        swaggerFileDef.schemes = ['HTTPS', 'HTTP'];
+    }
 
     // Returning swagger definition:
     res.send(swaggerFileDef);
 });
 
+//Include the html assets
+app.get('/anki-medrec-ext-apis/v1/anonymous', function (req, res) {
+
+
+    console.log("Requesting [" + "/anki-medrec-ext-apis/v1/anonymous" + "]");
+
+    // Uploading clean Swagger Definition file.
+    swaggerFileDef = yaml.load(fs.readFileSync(inputfile, {
+        encoding: 'utf-8'
+    }));
+
+
+    // Issuing dynamic updates:
+    var isAPIGWSecured = false;
+
+    /**
+     * 1. Updating the Host location to point to Anonymous API
+     */
+    if (config.API_GW_ENABLED != null &&
+        config.API_GW_ENABLED != undefined &&
+        config.API_GW_ENABLED == "true") {
+
+        console.log("API_GW_ENABLED");
+
+        swaggerFileDef.host = config.API_GW_SERVER + "/api/md/anonymous";
+
+        // API GAteway is enabled, thus we default to HTTPS as first option:
+        isAPIGWSecured = true;
+
+    } else {
+
+        // Updating the Host file dynamically
+        swaggerFileDef.host = "" + req.headers.host;
+    }
+
+    /**
+     * 2. Updating the default Scheme to use (i.e. HTTP or HTTPS)
+     */
+    if (isAPIGWSecured) {
+
+        console.log("Default HTTPS over HTTP");
+
+        // Swap and default HTTPS as first option:
+        swaggerFileDef.schemes = ['HTTPS', 'HTTP'];
+    }
+
+    /**
+     * 3. Updating some legends to ensure it reads as an anonymous MedRec access
+     */
+    if (isAPIGWSecured) {
+
+        swaggerFileDef.info.title += " (Anonymous access)";
+        swaggerFileDef.info.description += ". This is an anonymous Access and your data will " +
+            "last only during this session. If you wish to obtain a long-running session, sign up at http://developers.oracleau.cloud";
+    }
+
+    /**
+     * 4. Adding custom query-based X-App-Key for each path and set it to this session value:
+     */
+    if (isAPIGWSecured) {
+
+        // 36 digits session id should suffice...
+        var length = 36,
+            charset = "abcdefABCDEF0123456789",
+            sessionId = "ANONYM";
+        for (var i = 0, n = charset.length; i < length; ++i) {
+            sessionId += i % 8 == 0 ? '-' : charset.charAt(Math.floor(Math.random() * n));
+        }
+
+
+        // Custom header:
+        var custHeader = {
+            "name": "X-App-Key",
+            "in": "header",
+            "description": "Temporary API Key. Do not modify...",
+            "readOnly": true,
+            "required": false,
+            "type": "string",
+            "format": "string",
+            "default": sessionId
+        };
+
+
+        // Iterating across all Paths:
+        for (var apiKey in swaggerFileDef.paths) {
+
+            //console.log("Found apiKey [" + apiKey + "]");
+
+            // For each Path, iterate across all its Methods:
+            for (var methodName in swaggerFileDef.paths[apiKey]) {
+
+                //console.log("Found methodName [" + methodName + "]");
+
+                var fullMethod = swaggerFileDef.paths[apiKey][methodName];
+
+                if (fullMethod["parameters"] !== null && fullMethod["parameters"] !== undefined &&
+                    fullMethod.parameters.length > 0) {
+
+                    //console.log("Parametrs found for [" + apiKey + "][" + methodName + "] pushing instead...");
+
+                    fullMethod.parameters.push(custHeader);
+
+                } else {
+
+                    fullMethod["parameters"] = [custHeader];
+                }
+            }
+        }
+    }
+
+    // Returning swagger definition:
+    res.send(swaggerFileDef);
+});
+
+
 app.use('/', express.static(path.join(__dirname, 'swagger-dist')));
+
+app.use('/anonymous', express.static(path.join(__dirname, 'swagger-dist/anonymous.html')));
 
 
 // Configure routes and middleware for the application

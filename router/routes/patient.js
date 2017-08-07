@@ -29,6 +29,10 @@ module.exports = function (app) {
     /* GET Patient by Query Parameter */
     app.get('/patients', function (req, res) {
 
+
+        var aKey = req.get("anonymous");
+        console.log("aKey is [" + aKey + "]");
+
         var appKey = req.get("X-App-Key");
         var appKey = appKey != null && appKey != undefined ? appKey : "";
         console.log("X-App-Key used is [" + appKey + "]");

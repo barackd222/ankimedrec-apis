@@ -1,7 +1,7 @@
 swagger: "2.0"
 info:
   description: "This project aims to provide a base of eHealth APIs that can be leveraged for building new ideas. The APIs shown here are fully functional and can be tested in-place. When invoked, they call the Anki-MedRec Platform backend Applciations."
-  version: "1.0"
+  version: "2.1"
   title: "Anki-MedRec Platform - External APIs"
   #termsOfService: "http://anki-medrec.oracleau.cloud/terms/"
   contact:
