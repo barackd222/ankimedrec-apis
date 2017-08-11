@@ -1,6 +1,6 @@
-# Anki-Medrec - External APIs - Node.js & MongoDB
+# Anki-Medrec APIs - Node.js & MongoDB
 
-This is an application provides a Swagger API documentation for the Anki-Medrec Platform project.  For more information, [visit this link](http://anki.medrec.oracleau.cloud).
+This is an application provides a Swagger API documentation for the Anki-Medrec Platform project.  For more information, [visit this link](http://anki-medrec.oracleau.cloud).
 
 
 ## Installation
